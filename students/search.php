@@ -37,7 +37,7 @@
         <input type="search" name="search" placeholder="Buscar"></input>
         <input type="submit" value="Buscar"></input>
         <a class = "log" href="add.php"><input type="button" value="Agregar" href="add.php"></input> </a>
-        <a class="pdf" id="pdf"" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
+        <a class="pdf" id="pdf" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="logout.php"></input></a>
     </form>
     
@@ -59,7 +59,7 @@
             </thead>
             <tbody>
                 <?php 
-                $student_result = $mysqli->query("SELECT * FROM students WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%' OR student_group LIKE '%$search%'");
+                $student_result = $mysqli->query("SELECT * FROM students WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%'");
                 while($row = mysqli_fetch_array($student_result)) { ?> 
                     <tr>
                         <td><?php echo $row['student_id'] ?></td>
