@@ -120,10 +120,6 @@
 
         }
     </script>
-
-    <?php 
-        include "tableView.php";
-    ?>
     
     
 </body>

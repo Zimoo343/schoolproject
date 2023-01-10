@@ -46,11 +46,11 @@
     
     
 
-    <form action="search.php" method="GET" class="search" autocomplete="off">
+    <form action="employees.php" method="GET" class="search" autocomplete="off">
         <input type="search" name="search" placeholder="Buscar"></input>
         <input type="submit" value="Buscar"></input>
         <a class = "log" href="add.php"><input type="button" value="Agregar" href="add.php"></input> </a>
-        <a class="pdf" id="pdf"" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
+        <a class="pdf" id="pdf" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="../logout.php"></input></a>
     </form>
     <div class="tableView">
@@ -68,7 +68,12 @@
             </thead>
             <tbody>
                 <?php 
-                $employee_result = $mysqli->query("SELECT * FROM employees");
+                $search = strtolower($_REQUEST['search']);
+
+                $q = $search
+                    ? "SELECT * FROM employees WHERE employee_id LIKE '%$search%' OR employee_firstName LIKE '%$search%' OR employee_lastName LIKE '%$search%'"
+                    : "SELECT * FROM employees";
+                $employee_result = $mysqli->query($q);
                 while($row = mysqli_fetch_array($employee_result)) { ?>
                     <tr>
                         <td><?php echo $row['employee_id'] ?></td>
