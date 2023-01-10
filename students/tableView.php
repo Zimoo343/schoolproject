@@ -15,7 +15,14 @@
             </thead>
             <tbody>
                 <?php 
-                $student_result = $mysqli->query("SELECT * FROM students_data");
+                $search = strtolower($_REQUEST['search']);
+                if(empty($search)) {
+                    header("Location: /UNSC_database/students/students.php");
+                } 
+                $q = $search
+                    ? "SELECT * FROM students WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%'"
+                    : "SELECT * FROM students_data";
+                $student_result = $mysqli->query($q);
                 while($row = mysqli_fetch_array($student_result)) { ?>
                     <tr>
                         <td><?php echo $row['student_id'] ?></td>

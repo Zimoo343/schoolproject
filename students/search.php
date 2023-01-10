@@ -23,14 +23,6 @@
         <div class="title">
             <h1>Estudiantes <i class="fa-solid fa-user"></i></h1>
         </div>
-    <?php 
-    
-    $search = strtolower($_REQUEST['search']);
-    if(empty($search)) {
-        header("Location: /UNSC_database/students/students.php");
-    } 
-
-    ?>
 
 
     <form action="search.php" method="GET" class="search" autocomplete="off">
