@@ -24,16 +24,9 @@
   }
 ?>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://kit.fontawesome.com/2385ce6cbc.js" crossorigin="anonymous"></script>
-    <meta charset="utf-8">
-    <title>UNSC Base de datos</title>
-    <link rel="stylesheet" href="assets/styles/styles.css">
-    <link rel="icon" href="assets/imgs/unsc_logo.ico">
-  </head>
-  <body>
+<?php
+    include 'header.php';
+?>
       <header>
       <a href="/UNSC_database/">Inicio</a>
       </header>
