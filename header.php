@@ -8,6 +8,4 @@
     <title>Home</title>
 </head>
 <body>
-    <header>
-
-    </header>
+    
