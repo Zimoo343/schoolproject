@@ -4,9 +4,6 @@
 
     $mysqli = new mysqli("localhost", "root", "", "unsc_database");
 
-    
-    
-
     if (isset($_SESSION['user_id'])) {
         $records = $conn->prepare('SELECT user_id, user_name, user_password FROM users WHERE user_id = :id');
         $records->bindParam(':id', $_SESSION['user_id']);
@@ -18,21 +15,10 @@
             $user = $results;
         }
     }
+
+    include 'header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://kit.fontawesome.com/2385ce6cbc.js" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/styles/styles.css">
-    <link rel="icon" href="assets/imgs/unsc_logo.ico">  
-    <title>Home</title>
-</head>
-<body>
-    <header>
-
-    </header>
     
     <?php if(!empty($user)): ?>
         <h1>Hola, Bienvenido a</h1>
