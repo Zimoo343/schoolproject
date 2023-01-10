@@ -154,7 +154,7 @@ CREATE PROCEDURE `insert_student`(
   note VARCHAR(255),
   genre VARCHAR(255),
   state VARCHAR(255),
-  payment INT,
+  payment VARCHAR(255),
   group_id INT
 )
 BEGIN
