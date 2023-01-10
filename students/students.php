@@ -78,7 +78,7 @@
                         <td><?php echo $row['student_firstName'] ?></td>
                         <td><?php echo $row['student_lastName'] ?></td>
                         <td><?php echo $row['student_note'] ?></td>
-                        <td><?php echo $row['group_name'] ?></td>
+                        <td><?php echo $row['group_code'] ?></td>
                         <td><?php echo $row['student_genre'] ?></td>
                         <td><?php echo $row['student_state'] ?></td>
                         <td><?php echo $row['student_payment'] ?></td>
