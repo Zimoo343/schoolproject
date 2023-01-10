@@ -71,14 +71,14 @@
             </thead>
             <tbody>
                 <?php 
-                $student_result = $mysqli->query("SELECT * FROM students");
+                $student_result = $mysqli->query("SELECT * FROM students_data");
                 while($row = mysqli_fetch_array($student_result)) { ?>
                     <tr>
                         <td><?php echo $row['student_id'] ?></td>
                         <td><?php echo $row['student_firstName'] ?></td>
                         <td><?php echo $row['student_lastName'] ?></td>
                         <td><?php echo $row['student_note'] ?></td>
-                        <td><?php echo $row['student_group'] ?></td>
+                        <td><?php echo $row['group_name'] ?></td>
                         <td><?php echo $row['student_genre'] ?></td>
                         <td><?php echo $row['student_state'] ?></td>
                         <td><?php echo $row['student_payment'] ?></td>
