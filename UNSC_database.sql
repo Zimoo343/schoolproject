@@ -1,76 +1,256 @@
--- Crear Base de Datos
+-- =================== CREANDO TABLAS ===================
 
-CREATE DATABASE UNSC_Database;
+-- Tabla `employees`
 
--- Crear Tabla users
-
-CREATE TABLE UNSC_Database.users (
-    user_id INT(8) PRIMARY KEY AUTO_INCREMENT,
-    user_name VARCHAR(30),
-    user_password VARCHAR(16)
-);
-
--- Insertar Datos en tabla users
-
-INSERT INTO UNSC_Database.users (user_name, user_password) VALUES
-('admin', '123'),
-('striker', '123'),
-('jeringasLoko', '123'),
-('katu', '123'),
-('exul', '123'),
-('zimoo', '123');
-
--- Crear tabla students
-
-CREATE TABLE UNSC_Database.students (
-    student_id INT(8) PRIMARY KEY AUTO_INCREMENT,
-    student_firstName VARCHAR(40),
-    student_lastName VARCHAR(40),
-    student_note INT(3) DEFAULT 0,
-    student_group VARCHAR(3),
-    student_genre VARCHAR(1),
-    student_state VARCHAR(10),
-    student_payment VARCHAR(10)
-);
-
--- Insertar Datos en tabla students
-
-INSERT INTO UNSC_Database.students (student_firstName, student_lastName, student_note, student_group, student_genre, student_state, student_payment) VALUES
-('Luis Gerardo', 'Tinoco Coronel', 100, 'G32', 'H', 'Cursando', 'Pagado'),
-('David', 'Ruiz Lara', 80, 'G32', 'H', 'Cursando','Pagado'),
-('Miguel Angel', 'Ramirez Cruz', 90, 'G32', 'H', 'Cursando','No pagado'),
-('Alexis Guillermo', 'Gómez Puerto', 75, 'G32', 'H', 'Cursando', 'Pagado'),
-('Luis Alberto', 'De la Cruz Guerrero', 85, 'G32', 'H', 'Cursando', 'No pagado'),
-('Diego Alejandro', 'Macías Espejel', 70, 'G32', 'H', 'Egresado', 'Pagado'),
-('Estefania', 'Valencia', 90, 'G30', 'M', 'Egresado', 'Pagado'),
-('Maria', 'Mendoza Sanchez', default, 'A12', 'M', 'Egresado','Pagado'),
-('Cesar Eduardo', 'Gonzales Noriega', 80, 'G32', 'H', 'Egresado', 'Pagado'),
-('Helio', 'Barriga Obregón', default, 'G32', 'H', 'Cursando', 'No Pagado');
-
--- Crear tabla employees
-
-CREATE TABLE UNSC_Database.employees (
-    employee_id INT(8) PRIMARY KEY AUTO_INCREMENT,
-    employee_firstName VARCHAR(40),
-    employee_lastName VARCHAR(40),
-    employee_dept VARCHAR(40),
-    employee_genre VARCHAR(1),
-    employee_salary INT(8)
-);
-
--- Insertar Datos en tabla employees
-
-INSERT INTO UNSC_Database.employees (employee_firstName, employee_lastName, employee_dept, employee_genre, employee_salary) VALUES
-('Chris', 'Evans', 'Docente', 'H', 9600),
-('Robert', 'Downey', 'Sistemas', 'H', 10700),
-('Charlie', 'Murphy', 'Docente', 'M', 10700),
-('Ryan', 'Reynolds', 'Directivo', 'H', 14800),
-('Ben', 'Afleck', 'Administrativo', 'H', 8600),
-('Matthew', 'Mcconaughey', 'Administrativo', 'H', 10200),
-('Tom', 'Hiddleston', 'Docente', 'H', 9400),
-('Emma', 'Stone', 'Directivo', 'M', 14800),
-('Chris', 'Pratt', 'Administrativo', 'H', 10600),
-('Pablo', 'Schreiber', 'Directivo', 'H', 14800);
+DROP TABLE IF EXISTS `employees`;
+CREATE TABLE `employees` (
+  `employee_id` int(8) NOT NULL AUTO_INCREMENT,
+  `employee_firstName` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `employee_lastName` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `employee_dept` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `employee_genre` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `employee_salary` int(8) DEFAULT NULL,
+  PRIMARY KEY (`employee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+-- Tabla `groups`
 
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `group_code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Tabla `roles`
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Tabla `students`
+
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE `students` (
+  `student_id` int(8) NOT NULL AUTO_INCREMENT,
+  `student_firstName` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_lastName` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_note` int(3) DEFAULT '0',
+  `student_genre` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_state` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_payment` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `student_group_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`student_id`),
+  KEY `student_group_id` (`student_group_id`),
+  CONSTRAINT `students_ibfk_1` FOREIGN KEY (`student_group_id`) REFERENCES `groups` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Tabla `users`
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `user_id` int(8) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_password` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_employee_id` int(8) DEFAULT NULL,
+  `user_role_id` int(8) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `user_employee_id` (`user_employee_id`),
+  KEY `user_role_id` (`user_role_id`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`user_employee_id`) REFERENCES `employees` (`employee_id`),
+  CONSTRAINT `users_ibfk_2` FOREIGN KEY (`user_role_id`) REFERENCES `roles` (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- =================== CREANDO VISTAS ===================
+
+-- Tabla `users_data`
+
+DROP VIEW IF EXISTS `users_data`;
+CREATE VIEW `users_data` AS 
+SELECT 
+  `u`.`user_id`,
+  `u`.`user_name`,
+  `e`.`employee_firstName`,
+  `e`.`employee_lastName`,
+  `e`.`employee_genre`,
+  `e`.`employee_dept`,
+  `r`.`role_name`
+FROM 
+    `roles` `r` 
+LEFT JOIN `users` `u` 
+    ON `u`.`user_role_id` = `r`.`role_id`
+LEFT JOIN `employees` `e`
+    ON `u`.`user_employee_id` = `e`.`employee_id`;
+
+-- Tabla `students_data`
+
+DROP VIEW IF EXISTS `students_data`;
+CREATE VIEW `students_data` AS 
+SELECT 
+  `s`.`student_id`, 
+  `s`.`student_firstName`, 
+  `s`.`student_lastName`, 
+  `s`.`student_note`, 
+  `s`.`student_genre`, 
+  `s`.`student_state`, 
+  `s`.`student_payment`, 
+  `g`.`group_name`, 
+  `g`.`group_code`
+FROM 
+  `students` `s` 
+LEFT JOIN `groups` `g`
+    ON `s`.`student_group_id` = `g`.`group_id`;
+
+-- Tabla `students_per_group`
+
+DROP VIEW IF EXISTS `students_per_group`;
+CREATE VIEW `students_per_group` AS 
+SELECT 
+  `sd`.`group_code`, 
+  COUNT(`sd`.`group_code`) AS `amount` 
+FROM 
+  `students_data` `sd` 
+GROUP BY 
+  `sd`.`group_code`;
+
+-- =================== CREANDO PROCEDIMIENTOS ALMACENADOS ===================
+
+-- Funcion `insert_employee`
+
+CREATE PROCEDURE `insert_employee`(
+  firstName VARCHAR(255),
+  lastName VARCHAR(255),
+  dept VARCHAR(255),
+  genre VARCHAR(255),
+  salary INT
+)
+BEGIN
+  INSERT INTO employees (
+    employee_firstName,
+    employee_lastName,
+    employee_dept,
+    employee_genre,
+    employee_salary
+  )
+  VALUES (
+    firstName,
+    lastName,
+    dept,
+    genre,
+    salary
+  );
+END;
+
+-- Funcion `insert_student`
+
+CREATE PROCEDURE `insert_student`(
+  firstName VARCHAR(255),
+  lastName VARCHAR(255),
+  note VARCHAR(255),
+  genre VARCHAR(255),
+  state VARCHAR(255),
+  payment INT,
+  group_id INT
+)
+BEGIN
+  INSERT INTO students (
+    student_firstName, 
+    student_lastName, 
+    student_note, 
+    student_genre, 
+    student_state, 
+    student_payment, 
+    student_group_id
+  )
+  VALUES (
+    firstName,
+    lastName,
+    note,
+    genre,
+    state,
+    payment,
+    group_id
+  );
+END;
+
+-- Funcion `insert_user`
+
+CREATE PROCEDURE `insert_user`(
+  name VARCHAR(255),
+  password VARCHAR(255),
+  employee_id INT,
+  role_id INT
+)
+BEGIN
+  INSERT INTO users (
+    user_name,
+    user_password,
+    user_employee_id,
+    user_role_id
+  )
+  VALUES (
+    LOWER(name),
+    password,
+    employee_id,
+    role_id
+  );
+END;
+
+-- Trigger `after_insert_employee_create_user`
+CREATE TRIGGER 
+  after_insert_employee_create_user
+AFTER INSERT 
+ON employees FOR EACH ROW  
+BEGIN  
+  CALL insert_user(
+    NEW.employee_firstName,
+    CONCAT(NEW.employee_firstName, NEW.employee_lastName, '123'), -- password FirstLast123
+    NEW.employee_id,
+    3 -- role id / default 3 = basic
+  );
+END;
+
+
+-- =================== INSERTANDO DATOS ===================
+
+-- Roles
+
+INSERT INTO `roles` (`role_name`) VALUES ('superuser');
+INSERT INTO `roles` (`role_name`) VALUES ('admin');
+INSERT INTO `roles` (`role_name`) VALUES ('basic');
+
+-- Grupos
+
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo de la Maestra Juanita', 'G46');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo del salon del fondo', 'A14');
+
+-- Empleados
+
+CALL insert_employee('Chris', 'Evans', 'Docente', 'H', 9600);
+CALL insert_employee('Robert', 'Downey', 'Sistemas', 'H', 10700);
+CALL insert_employee('Charlie', 'Murphy', 'Docente', 'M', 10700);
+CALL insert_employee('Ryan', 'Reynolds', 'Directivo', 'H', 14800);
+CALL insert_employee('Ben', 'Afleck', 'Administrativo', 'H', 8600);
+CALL insert_employee('Matthew', 'Mcconaughey', 'Administrativo', 'H', 10200);
+CALL insert_employee('Tom', 'Hiddleston', 'Docente', 'H', 9400);
+CALL insert_employee('Emma', 'Stone', 'Directivo', 'M', 14800);
+CALL insert_employee('Chris', 'Pratt', 'Administrativo', 'H', 10600);
+CALL insert_employee('Pablo', 'Schreiber', 'Directivo', 'H', 14800);
+
+-- Estudiantes
+
+CALL insert_student('Luis Gerardo','Tinoco Coronel',100,'H','Cursando','Pagado',1);
+CALL insert_student('David','Ruiz Lara',80,'H','Cursando','Pagado',1);
+CALL insert_student('Miguel Angel','Ramirez Cruz',90,'H','Cursando','No pagado',1);
+CALL insert_student('Alexis Guillermo','Gómez Puerto',75,'H','Cursando','Pagado',1);
+CALL insert_student('Luis Alberto','De la Cruz Guerrero',85,'H','Cursando','No pagado',1);
+CALL insert_student('Diego Alejandro','Macías Espejel',70,'H','Egresado','Pagado',1);
+CALL insert_student('Estefania','Valencia',90,'M','Egresado','Pagado',1);
+CALL insert_student('Maria','Mendoza Sanchez',-1,'M','Egresado','Pagado',1);
+CALL insert_student('Cesar Eduardo','Gonzales Noriega',80,'H','Egresado','Pagado',2);
+CALL insert_student('Helio','Barriga Obregón',-1,'H','Cursando','No Pagado',2);
