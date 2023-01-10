@@ -68,7 +68,7 @@
             </thead>
             <tbody>
                 <?php 
-                $search = strtolower($_REQUEST['search']);
+                $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
 
                 $q = $search
                     ? "SELECT * FROM employees WHERE employee_id LIKE '%$search%' OR employee_firstName LIKE '%$search%' OR employee_lastName LIKE '%$search%'"

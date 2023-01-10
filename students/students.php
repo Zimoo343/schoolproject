@@ -72,7 +72,7 @@
             </thead>
             <tbody>
                 <?php 
-                $search = strtolower($_REQUEST['search']);
+                $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
 
                 $q = $search
                     ? "SELECT * FROM students_data WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%'"
