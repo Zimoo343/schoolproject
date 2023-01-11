@@ -226,8 +226,16 @@ INSERT INTO `roles` (`role_name`) VALUES ('basic');
 
 -- Grupos
 
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo de la Maestra Juanita', 'G46');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo del salon del fondo', 'A14');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 1', 'G01');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 2', 'G02');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 3', 'G03');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 4', 'G04');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 5', 'G05');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 6', 'G06');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 7', 'G07');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 8', 'G08');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 9', 'G09');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 10', 'G10');
 
 -- Empleados
 

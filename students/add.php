@@ -5,13 +5,13 @@ require '../database.php';
 
 $message = '';
 
-if (!empty($_POST['student_firstName']) && !empty($_POST['student_lastName']) && !empty($_POST['student_note']) && !empty($_POST['student_group']) && !empty($_POST['student_genre']) && !empty($_POST['student_state']) && !empty($_POST['student_payment'])) { //En el post va el atributo del form
-    $sql = "INSERT INTO students (student_firstName, student_lastName,  student_note, student_group, student_genre, student_state,  student_payment) VALUES (:first_name, :last_name, :note, :group, :genre, :state, :payment)"; //Nombres de variables para pasarle los datos
+if (!empty($_POST['student_firstName']) && !empty($_POST['student_lastName']) && !empty($_POST['student_note']) && !empty($_POST['student_group_id']) && !empty($_POST['student_genre']) && !empty($_POST['student_state']) && !empty($_POST['student_payment'])) { //En el post va el atributo del form
+    $sql = "INSERT INTO students (student_firstName, student_lastName,  student_note, student_group_id, student_genre, student_state,  student_payment) VALUES (:first_name, :last_name, :note, :group, :genre, :state, :payment)"; //Nombres de variables para pasarle los datos
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':first_name', $_POST['student_firstName']); //variable vinculada con un parametro
     $stmt->bindParam(':last_name', $_POST['student_lastName']);
     $stmt->bindParam(':note', $_POST['student_note']);
-    $stmt->bindParam(':group', $_POST['student_group']);
+    $stmt->bindParam(':group', $_POST['student_group_id']);
     $stmt->bindParam(':genre', $_POST['student_genre']);
     $stmt->bindParam(':state', $_POST['student_state']);
     $stmt->bindParam(':payment', $_POST['student_payment']);
@@ -47,8 +47,8 @@ if (!empty($_POST['student_firstName']) && !empty($_POST['student_lastName']) &&
     <form action="add.php" method="POST" autocomplete="off">
     <input type="text" name="student_firstName" placeholder="Nombre" required>
     <input type="text" name="student_lastName" placeholder="Apellido" required>
-    <input type="number" name="student_note" placeholder="Calificación" min=1 max=100 required>
-    <input type="text" name="student_group" placeholder="Grupo" required>
+    <input type="number" name="student_note" placeholder="Calificación" min=-1 max=100 required>
+    <input type="text" name="student_group_id" placeholder="Grupo" required>
     
     <div class="custom_select">
         <select name="student_genre" id="select_label" >
