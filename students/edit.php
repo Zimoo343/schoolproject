@@ -11,7 +11,7 @@
             $first_name = $row['student_firstName'];
             $last_name = $row['student_lastName'];
             $note = $row['student_note'];
-            $group = $row['student_group'];
+            $group = $row['student_group_id'];
             $genre = $row['student_genre'];
             $payment = $row['student_payment'];
 
@@ -20,13 +20,13 @@
     }
 
     if(isset($_POST['update'])) {
-        $query = "UPDATE students SET student_firstName = :first_name, student_lastName = :last_name, student_note = :note, student_group = :group, student_genre = :genre, student_state = :state,  student_payment = :payment WHERE student_id = :id";
+        $query = "UPDATE students SET student_firstName = :first_name, student_lastName = :last_name, student_note = :note, student_group_id = :group, student_genre = :genre, student_state = :state,  student_payment = :payment WHERE student_id = :id";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':id', $_GET['student_id']);
         $stmt->bindParam(':first_name', $_POST['student_firstName']); //variable vinculada con un parametro
         $stmt->bindParam(':last_name', $_POST['student_lastName']);
         $stmt->bindParam(':note', $_POST['student_note']);
-        $stmt->bindParam(':group', $_POST['student_group']);
+        $stmt->bindParam(':group', $_POST['student_group_id']);
         $stmt->bindParam(':genre', $_POST['student_genre']);
         $stmt->bindParam(':state', $_POST['student_state']);
         $stmt->bindParam(':payment', $_POST['student_payment']);
@@ -57,8 +57,8 @@
         <form action= "edit.php?student_id=<?php echo $_GET['student_id']?>" method="POST" autocomplete="off">
             <input type="text" name = "student_firstName" placeholder="Nombre" value="<?php echo $first_name; ?>" required>
             <input type="text" name = "student_lastName" placeholder="Apellido" value="<?php echo $last_name; ?>" required>
-            <input type="number" name = "student_note" placeholder="Calificación" value="<?php echo $note; ?>" min=1 max=100 required>
-            <input type="text" name = "student_group" placeholder="Grupo" value="<?php echo $group; ?>" required>
+            <input type="number" name = "student_note" placeholder="Calificación" value="<?php echo $note; ?>" min=-1 max=100 required>
+            <input type="text" name = "student_group_id" placeholder="Grupo" value="<?php echo $group; ?>" required>
 
             <div class="custom_select">
                 <select name="student_genre" id="select_label" >
@@ -78,8 +78,6 @@
                 <select name="student_payment" id="select_label" >
                     <option value="No pagado" id='No pagado'>No pagado</option>
                     <option value="Pagado" id='Pagado'>Pagado</option>
-                    <!-- <option value="Pagado" id='Pagado'>Pagado</option>
-                    <option value="Pagado" id='Pagado'>Pagado</option> -->
                 </select>
             </div>
             <input type="submit" name="update" value="Actualizar">
