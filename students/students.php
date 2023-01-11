@@ -47,13 +47,14 @@
     
     
 
-    <form action="search.php" method="GET" class="search" autocomplete="off">
+    <form action="students.php" method="GET" class="search" autocomplete="off">
         <input type="search" name="search" placeholder="Buscar"></input>
         <input type="submit" value="Buscar"></input>
         <a class = "log" href="add.php"><input type="button" value="Agregar" href="add.php"></input> </a>
-        <a class="pdf" id="pdf"" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
+        <a class="pdf" id="pdf" href="javascript:generatePDF()"><input type="button" value="Reporte"></input></a>
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="logout.php"></input></a>
     </form>
+
     <div class="tableView">
         <table class="student_table">
             <thead>
@@ -71,7 +72,12 @@
             </thead>
             <tbody>
                 <?php 
-                $student_result = $mysqli->query("SELECT * FROM students_data");
+                $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
+
+                $q = $search
+                    ? "SELECT * FROM students_data WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%'"
+                    : "SELECT * FROM students_data";
+                $student_result = $mysqli->query($q);
                 while($row = mysqli_fetch_array($student_result)) { ?>
                     <tr>
                         <td><?php echo $row['student_id'] ?></td>
@@ -92,7 +98,6 @@
         </table>
 
     </div>
-    
 
     <script>
         async function generatePDF() {
@@ -115,6 +120,7 @@
 
         }
     </script>
+    
     
 </body>
 </html>
