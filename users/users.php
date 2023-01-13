@@ -36,7 +36,7 @@
     
     <?php if(!empty($user)): ?>
         <div class="title">
-            <h1>Users <i class="fa-solid fa-unlock"></i></h1>
+            <h1>Usuarios <i class="fa-solid fa-unlock"></i></h1>
         </div>
         <?php endif; ?>
         

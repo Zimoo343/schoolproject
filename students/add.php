@@ -48,7 +48,7 @@ if (!empty($_POST['student_firstName']) && !empty($_POST['student_lastName']) &&
     <input type="text" name="student_firstName" placeholder="Nombre" required>
     <input type="text" name="student_lastName" placeholder="Apellido" required>
     <input type="number" name="student_note" placeholder="Calificación" min=-1 max=100 required>
-    <input type="text" name="student_group_id" placeholder="Grupo" required>
+    <input type="number" name="student_group_id" placeholder="Grupo" min=1 max=10 required>
     
     <div class="custom_select">
         <select name="student_genre" id="select_label" >

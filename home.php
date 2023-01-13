@@ -29,6 +29,7 @@
 
         <a href="students/students.php"><input type="button" value="Estudiantes"></input></a>
         <a href="employees/employees.php"><input type="button" value="Empleados"></input></a>
+        <a href="courses/courses.php"><input type="button" value="Cursos"></input></a>
         <a href="users/users.php"><input type="button" value="Admins"></input></a>
         <a href="logout.php"><input type="button" value="Salir"></input></a></i>
 </body>
