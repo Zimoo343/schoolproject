@@ -54,7 +54,7 @@
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="../logout.php"></input></a>
     </form>
     <div class="tableView">
-        <table class="employee_table">
+        <table class="student_table">
             <thead>
                 <tr>
                 <th>ID</th>
@@ -74,7 +74,7 @@
                 $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
 
                 $q = $search
-                    ? "SELECT * FROM courses_data WHERE course_id LIKE '%$search%' OR course_title LIKE '%$search%'"
+                    ? "SELECT * FROM courses_data WHERE course_id LIKE '%$search%' OR course_code LIKE '%$search%' OR employee_firstName LIKE '%$search%' OR course_title LIKE '%$search%'"
                     : "SELECT * FROM courses_data";
                 $employee_result = $mysqli->query($q);
                 while($row = mysqli_fetch_array($employee_result)) { ?>

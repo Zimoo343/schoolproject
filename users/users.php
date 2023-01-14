@@ -8,7 +8,7 @@
     
 
     if (isset($_SESSION['user_id'])) {
-        $records = $conn->prepare('SELECT user_id, user_name, user_password FROM users WHERE user_id = :id');
+        $records = $conn->prepare('SELECT * FROM users WHERE user_id = :id');
         $records->bindParam(':id', $_SESSION['user_id']);
         $records->execute(); 
         $results = $records->fetch(PDO::FETCH_ASSOC);
@@ -54,16 +54,18 @@
                 <tr>
                 <th>ID</th>
                 <th>Usuario</th>
+                <th>Rol</th>
                 <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
             <?php 
-                $users_result = $mysqli->query("SELECT * FROM users");
+                $users_result = $mysqli->query("SELECT * FROM users u JOIN roles r ON r.role_id = u.user_role_id");
                 while($row = mysqli_fetch_array($users_result)) { ?>
                     <tr>
                         <td><?php echo $row['user_id'] ?></td>
                         <td><?php echo $row['user_name'] ?></td>
+                        <td><?php echo $row['role_name'] ?></td>
                         <td>
                             <a href="delete.php?user_id=<?php echo $row['user_id']?>"><i id="trash-can" class="fa-solid fa-trash-can"></i></a>
                         </td>

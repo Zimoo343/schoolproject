@@ -54,42 +54,29 @@
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="../logout.php"></input></a>
     </form>
     <div class="tableView">
-        <table class="employee_table">
-            <thead>
-                <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Departamento</th>
-                <th>Género</th>
-                <th>Salario</th>
-                <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
+    <?php
+        include "../utils.php";
+        $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
 
-                $q = $search
-                    ? "SELECT * FROM employees WHERE employee_id LIKE '%$search%' OR employee_firstName LIKE '%$search%' OR employee_lastName LIKE '%$search%'"
-                    : "SELECT * FROM employees";
-                $employee_result = $mysqli->query($q);
-                while($row = mysqli_fetch_array($employee_result)) { ?>
-                    <tr>
-                        <td><?php echo $row['employee_id'] ?></td>
-                        <td><?php echo $row['employee_firstName'] ?></td>
-                        <td><?php echo $row['employee_lastName'] ?></td>
-                        <td><?php echo $row['employee_dept'] ?></td>
-                        <td><?php echo $row['employee_genre'] ?></td>
-                        <td> $ <?php echo $row['employee_salary'] ?></td>
-                        <td>
-                            <a href="edit.php?employee_id=<?php echo $row['employee_id']?>"><i id="editIcon" class="fa-solid fa-pen-to-square"></i></a>
-                            <a href="delete.php?employee_id=<?php echo $row['employee_id']?>"><i id="trashIcon" class="fa-solid fa-trash-can"></i></a>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+        $q = $search
+            ? "SELECT * FROM employees WHERE employee_id LIKE '%$search%' OR employee_firstName LIKE '%$search%' OR employee_lastName LIKE '%$search%'"
+            : "SELECT * FROM employees";
+
+        $actions = [
+            [
+                "page" => "edit",
+                "param" => "employee_id",
+                "icon" => "fa-solid fa-pen-to-square",
+            ],
+            [
+                "page" => "delete",
+                "param" => "employee_id",
+                "icon" => "fa-solid fa-trash-can",
+            ],
+        ];
+
+        outputMySQLToHTMLTable($mysqli, $q, $actions);
+    ?>
     </div>
     
     <script>

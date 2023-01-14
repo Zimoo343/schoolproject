@@ -39,12 +39,12 @@
     
     <?php if(!empty($user)): ?>
         <div class="title">
-            <h1>Estudiantes <i class="fa-solid fa-user"></i></h1>
+            <h1>Calificaciones <i class="fa-sharp fa-solid fa-list"></i></h1>
         </div>
         <?php endif; ?>
         
     
-    
+        
     
 
     <form action="students.php" method="GET" class="search" autocomplete="off">
@@ -55,62 +55,6 @@
         <a class = "log" href="../logout.php"><input type="button" value="Salir" href="logout.php"></input></a>
     </form>
 
-    <div class="tableView">
-
-
-    <?php
-        include "../utils.php";
-        $search = isset($_REQUEST['search']) ? strtolower($_REQUEST['search']) : "";
-
-        $q = $search
-            ? "SELECT * FROM students_data WHERE student_id LIKE '%$search%' OR student_firstName LIKE '%$search%' OR student_lastName LIKE '%$search%'"
-            : "SELECT * FROM students_data";
-
-        $actions = [
-            [
-                "page" => "grades",
-                "param" => "student_id",
-                "icon" => "fa-sharp fa-solid fa-list",
-            ],
-            [
-                "page" => "edit",
-                "param" => "student_id",
-                "icon" => "fa-solid fa-pen-to-square",
-            ],
-            [
-                "page" => "delete",
-                "param" => "student_id",
-                "icon" => "fa-solid fa-trash-can",
-            ],
-        ];
-
-        outputMySQLToHTMLTable($mysqli, $q, $actions);
-    ?>
-
-    </div>
-
-    <script>
-        async function generatePDF() {
-            document.getElementById("pdf").innerHTML;
-
-            //Downloading
-            var downloading = document.getElementById("body");
-            var doc = new jsPDF('l', 'pt');
-
-            await html2canvas(downloading, {
-                //allowTaint: true,
-                //useCORS: true,
-                width: 530
-            }).then((canvas) => {
-                //Canvas (convert to PNG)
-                doc.addImage(canvas.toDataURL("image/png"), 'PNG', 50, 50, 800, 400);
-            })
-
-            doc.save("ReporteStudents.pdf");
-
-        }
-    </script>
-    
     
 </body>
 </html>

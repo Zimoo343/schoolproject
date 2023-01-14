@@ -73,6 +73,22 @@ CREATE TABLE `courses` (
   CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`course_employee_id`) REFERENCES `employees` (`employee_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Tabla `grades`
+
+DROP TABLE IF EXISTS `grades`;
+CREATE TABLE `grades` (
+  `grade_id` int(8) NOT NULL AUTO_INCREMENT,
+  `grade` int(3) DEFAULT NULL,
+  `evaluation_date` date DEFAULT NULL,
+  `evaluation_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `course_id` int(8) NOT NULL,
+  `student_id` int(8) NOT NULL,
+  PRIMARY KEY (`grade_id`),
+  FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
+  FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 -- Tabla `users`
 
 DROP TABLE IF EXISTS `users`;
@@ -129,9 +145,9 @@ FROM
 LEFT JOIN `groups` `g`
     ON `s`.`student_group_id` = `g`.`group_id`;
 
--- Tabla Users Data
+-- Tabla Courses Data
 
-DROP VIEW IF EXISTS `users_data`;
+DROP VIEW IF EXISTS `courses_data`;
 CREATE VIEW `courses_data` AS
 SELECT * 
 FROM `courses` `c` 
@@ -190,34 +206,42 @@ BEGIN
     genre,
     salary
   );
-END $$;
+END $$
+DELIMITER;
 
 -- Funcion `insert_student`
 
 DELIMITER $$
-CREATE PROCEDURE `insert_employee`(
+CREATE PROCEDURE `insert_student`(
   firstName VARCHAR(255),
   lastName VARCHAR(255),
-  dept VARCHAR(255),
+  note VARCHAR(255),
   genre VARCHAR(255),
-  salary INT
+  state VARCHAR(255),
+  payment VARCHAR(255),
+  group_id INT
 )
 BEGIN
-  INSERT INTO employees (
-    employee_firstName,
-    employee_lastName,
-    employee_dept,
-    employee_genre,
-    employee_salary
+  INSERT INTO students (
+    student_firstName, 
+    student_lastName, 
+    student_note, 
+    student_genre, 
+    student_state, 
+    student_payment, 
+    student_group_id
   )
   VALUES (
     firstName,
     lastName,
-    dept,
+    note,
     genre,
-    salary
+    state,
+    payment,
+    group_id
   );
-END $$;
+END $$
+DELIMITER;
 
 -- Funcion `insert_course`
 
@@ -250,7 +274,8 @@ BEGIN
     start_date,
     end_date 
   );
-END $$;
+END $$
+DELIMITER;
 
 -- Funcion `insert_user`
 
@@ -274,7 +299,8 @@ BEGIN
     employee_id,
     role_id
   );
-END $$;
+END $$
+DELIMITER;
 
 -- Funcion `get_course_employee_by_code`
 
@@ -289,12 +315,55 @@ JOIN
   courses c ON e.employee_id = c.course_employee_id
 WHERE
   course_code LIKE code;
-END $$;
+END $$
+DELIMITER;
 
 -- Ejemplo de uso
 -- CALL get_course_employee_by_code('2732');
 
+-- Funcion `update_student_note`
 
+DELIMITER $$
+CREATE PROCEDURE `update_student_note`(IN studentId INT)
+BEGIN
+    UPDATE students SET student_note = 
+    (SELECT AVG(grade) FROM grades WHERE student_id = studentId)
+    WHERE student_id = studentId;
+END $$
+DELIMITER ;
+
+
+-- Triggers  `update_student_note_after_grade_change`
+
+-- Trigger for INSERT on grades
+DELIMITER $$
+CREATE TRIGGER update_student_note_after_grade_insert
+AFTER INSERT ON grades
+FOR EACH ROW
+BEGIN
+CALL update_student_note(NEW.student_id);
+END $$
+DELIMITER ;
+
+-- Trigger for UPDATE on grades
+DELIMITER $$
+CREATE TRIGGER update_student_note_after_grade_update
+AFTER UPDATE ON grades
+FOR EACH ROW
+BEGIN
+CALL update_student_note(NEW.student_id);
+END $$
+DELIMITER ;
+
+-- Trigger for DELETE on grades
+DELIMITER $$
+CREATE TRIGGER update_student_note_after_grade_delete
+AFTER DELETE ON grades
+FOR EACH ROW
+BEGIN
+CALL update_student_note(OLD.student_id);
+END $$
+DELIMITER;
 
 -- Trigger `after_insert_employee_create_user`
 
@@ -310,7 +379,8 @@ BEGIN
     NEW.employee_id,
     3 -- role id / default 3 = basic
   );
-END $$;
+END $$
+DELIMITER;
 
 
 -- =================== INSERTANDO DATOS ===================
@@ -323,15 +393,15 @@ INSERT INTO `roles` (`role_name`) VALUES ('basic');
 
 -- Grupos
 
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 01', 'G01');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 02', 'B02');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 03', 'G03');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 04', 'G04');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 05', 'G05');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 06', 'G06');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 07', 'G07');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 08', 'G08');
-INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 09', 'G09');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 1', 'G01');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 2', 'B02');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 3', 'G03');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 4', 'G04');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 5', 'G05');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 6', 'G06');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 7', 'G07');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 8', 'G08');
+INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 9', 'G09');
 INSERT INTO .`groups` (`group_name`, `group_code`) VALUES ('Grupo 32', 'G32');
 
 -- Empleados
@@ -349,15 +419,15 @@ CALL insert_employee('Chris', 'Pratt', 'Administrativo', 'H', 10600);
 
 -- Estudiantes
 
-CALL insert_student('Luis Gerardo','Tinoco Coronel',100,'H','Cursando','Pagado',1);
-CALL insert_student('David','Ruiz Lara',80,'H','Cursando','Pagado',2);
-CALL insert_student('Miguel Angel','Ramirez Cruz',90,'H','Cursando','No pagado',3);
-CALL insert_student('Alexis Guillermo','Gómez Puerto',75,'H','Cursando','Pagado',4);
-CALL insert_student('Luis Alberto','De la Cruz Guerrero',85,'H','Cursando','No pagado',5);
-CALL insert_student('Diego Alejandro','Macías Espejel',70,'H','Egresado','Pagado',1);
-CALL insert_student('Estefania','Valencia',90,'M','Egresado','Pagado',2);
+CALL insert_student('Luis Gerardo','Tinoco Coronel',-1,'H','Cursando','Pagado',1);
+CALL insert_student('David','Ruiz Lara',-1,'H','Cursando','Pagado',2);
+CALL insert_student('Miguel Angel','Ramirez Cruz',-1,'H','Cursando','No pagado',3);
+CALL insert_student('Alexis Guillermo','Gómez Puerto',-1,'H','Cursando','Pagado',4);
+CALL insert_student('Luis Alberto','De la Cruz Guerrero',-1,'H','Cursando','No pagado',5);
+CALL insert_student('Diego Alejandro','Macías Espejel',-1,'H','Egresado','Pagado',1);
+CALL insert_student('Estefania','Valencia',-1,'M','Egresado','Pagado',2);
 CALL insert_student('Maria','Mendoza Sanchez',-1,'M','Egresado','Pagado',3);
-CALL insert_student('Cesar Eduardo','Gonzales Noriega',80,'H','Egresado','Pagado',4);
+CALL insert_student('Cesar Eduardo','Gonzales Noriega',-1,'H','Egresado','Pagado',4);
 CALL insert_student('Helio','Barriga Obregón',-1,'H','Cursando','No Pagado',5);
 
 -- Cursos
@@ -373,10 +443,53 @@ CALL insert_course('7889', 'React Native', 'Curso React Native', '3', '8', '2023
 CALL insert_course('9663', 'Bases de Datos', 'Materia Bases de datos', '2', '9', '2023-01-12', '2023-08-12');
 CALL insert_course('1256', 'Inteligencia Artificial', 'Materia Inteligencia Artificial', '1', '10', '2023-01-12', '2023-08-12');
 
+-- Calificaciones
+
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (90, '2023-02-01', 'Examen parcial', 1, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-03-01', 'Examen final', 1, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (80, '2023-02-01', 'Examen parcial', 2, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (75, '2023-03-01', 'Examen final', 2, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (70, '2023-02-01', 'Examen parcial', 3, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (65, '2023-03-01', 'Examen final', 3, 1);
+
+-- Otros inserts para estudiantes
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (95, '2023-02-01', 'Examen parcial', 1, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (92, '2023-03-01', 'Examen final', 1, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-02-01', 'Examen parcial', 2, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (80, '2023-03-01', 'Examen final', 2, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (90, '2023-02-01', 'Examen parcial', 3, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-03-01', 'Examen final', 3, 2);
+
+-- Otros inserts para estudiantes
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (50, '2023-02-01', 'Examen parcial', 1, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (92, '2023-03-01', 'Examen final', 1, 2);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-02-01', 'Examen parcial', 2, 3);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (80, '2023-03-01', 'Examen final', 2, 4);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (90, '2023-02-01', 'Examen parcial', 3, 5);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-03-01', 'Examen final', 3, 6);
+
+
+-- Otros inserts para estudiantes
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (100, '2023-02-01', 'Examen parcial', 1, 7);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (92, '2023-03-01', 'Examen final', 1, 8);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-02-01', 'Examen parcial', 2, 9);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (80, '2023-03-01', 'Examen final', 2, 10);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (90, '2023-02-01', 'Examen parcial', 3, 1);
+INSERT INTO grades (grade, evaluation_date, evaluation_type, course_id, student_id) VALUES (85, '2023-03-01', 'Examen final', 3, 2);
 
 
 
 
 
 
+-- Testeo apartir de aqui abajo
+
+select
+    c.course_title,
+    c.course_code,
+    g.grade
+from
+	students s
+left join grades g on s.student_id = g.student_id 
+left join courses c on g.course_id = c.course_id;
 
